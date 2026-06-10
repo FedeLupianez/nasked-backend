@@ -6,13 +6,15 @@ import { dataSourceOptions } from 'data-source';
 import { UsersModule } from './entities/users/users.module';
 import { CompaniesModule } from './entities/companies/companies.module';
 import { AdminsModule } from './entities/admins/admins.module';
+import { FoldersModule } from './entities/folders/folders.module';
 
 @Module({
     imports: [
         TypeOrmModule.forRoot(dataSourceOptions),
         UsersModule,
         CompaniesModule,
-        AdminsModule
+        AdminsModule,
+        FoldersModule
     ],
     controllers: [AppController],
     providers: [AppService],
