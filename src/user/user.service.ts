@@ -10,7 +10,8 @@ import { hash } from 'argon2';
 
 @Injectable()
 export class UserService {
-    constructor(@InjectRepository(UsersEntity) private readonly usersRepo: Repository<UsersEntity>,
+    constructor(
+        @InjectRepository(UsersEntity) private readonly usersRepo: Repository<UsersEntity>,
         @InjectRepository(AdminsEntity) private readonly adminsRepo: Repository<AdminsEntity>,
     ) { }
 

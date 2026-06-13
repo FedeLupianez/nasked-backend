@@ -27,10 +27,10 @@ export class FoldersEntity {
     @Column({ type: 'varchar', length: 50, nullable: false })
     name: string;
 
-    @Column({ type: 'uuid', name: 'belong_id' })
+    @Column({ type: 'uuid', name: 'belong_id', nullable: true })
     belong_id: string;
 
-    @ManyToOne(() => FoldersEntity, { nullable: false })
+    @ManyToOne(() => FoldersEntity, { nullable: true })
     @JoinColumn({ name: 'belong_id', referencedColumnName: 'id_folder' })
     belong: FoldersEntity;
 

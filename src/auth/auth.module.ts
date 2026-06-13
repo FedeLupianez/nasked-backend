@@ -11,7 +11,7 @@ import { JwtStrategy } from './jwt.stategy';
 
 @Module({
     imports: [PassportModule, JwtModule.register({
-        secret: process.env.JWT_SECRET,
+        secret: process.env.JWT_SECRET ?? 'secret',
         signOptions: { expiresIn: (process.env.JWT_ACCESS_EXPIRATION || '15m') as `${number}${'s' | 'm' | 'h' | 'd'}` }
     }),
         TypeOrmModule.forFeature([RefreshTokens]),
