@@ -1,5 +1,5 @@
 
-import { type User } from 'src/user/user.dto'
+import type { User } from 'src/user/user.dto'
 import { AdminsEntity } from './admins.entity';
 
 export interface AdminDTO extends User {

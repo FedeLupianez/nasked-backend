@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('RefreshTokens')
-export class TokensEntity {
+export class RefreshTokens {
     @PrimaryGeneratedColumn('uuid', { name: 'id_token' })
     id_token: string;
 
@@ -12,7 +12,7 @@ export class TokensEntity {
     expires_at: string;
 
 
-    @Column({ type: 'timestamp', name: 'revoked_at' })
+    @Column({ type: 'timestamp', name: 'revoked_at', nullable: true })
     revoked_at: string;
 
     @Column({ type: 'inet4', name: 'ip_address' })
