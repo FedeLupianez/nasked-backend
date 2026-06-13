@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import type { MigrationInterface, QueryRunner } from "typeorm";
 
 export class AddStructureWithoutCards1781385685359 implements MigrationInterface {
     name = 'AddStructureWithoutCards1781385685359'
