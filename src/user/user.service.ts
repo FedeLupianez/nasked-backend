@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdminsEntity } from 'src/entities/admins/admins.entity';
 import { UsersEntity } from 'src/entities/users/users.entity';
@@ -39,6 +39,15 @@ export class UserService {
         if (!user)
             throw new NotFoundException(`User with id ${userId} not found`);
         return UsersMapper.toDTO(user);
+    }
+
+    async get_admin(userId: string): Promise<User> {
+        if (!userId)
+            throw new BadRequestException('Id is empty');
+        const admin = await this.adminsRepo.findOneBy({ id_admin: userId });
+        if (!admin)
+            throw new UnauthorizedException('user is not admin')
+        return AdminMapper.toDTO(admin);
     }
 
     async create(user: UserCreateDTO): Promise<User> {
