@@ -1,18 +1,33 @@
-import { type AdminsCreateDTO } from "../admins/admins.dto";
+import { IsEmail, IsNotEmpty, IsString, IsUrl } from "class-validator";
 import { CompaniesEntity } from "./companies.entity";
 
-export interface CompanyCreateDTO extends AdminsCreateDTO {
+export class CompanyCreateDTO {
+    @IsEmail()
+    email: string;
+
+    @IsNotEmpty()
+    @IsString()
+    password: string;
+
+    @IsNotEmpty()
+    @IsString()
+    company: string;
+
+    @IsUrl()
     logo: string;
 }
 
-export interface CompanyDTO {
+export class CompanyDTO {
     id_company: string;
+    @IsString()
     name: string;
+    @IsUrl()
     logo: string;
 }
 
-export interface UpdateLogoDTO {
+export class UpdateLogoDTO {
     id_company: string;
+    @IsUrl()
     logo: string;
 }
 

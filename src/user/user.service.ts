@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import type { User, UserCreateDTO } from './user.dto';
+import { type User, UserCreateDTO } from './user.dto';
 import { UsersService } from 'src/entities/users/users.service';
 import { AdminsService } from 'src/entities/admins/admins.service';
 

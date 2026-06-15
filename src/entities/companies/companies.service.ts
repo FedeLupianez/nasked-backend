@@ -1,5 +1,5 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { type CompanyCreateDTO, type CompanyDTO, CompanyMapper } from './companies.dto';
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException, forwardRef } from '@nestjs/common';
+import { CompanyCreateDTO, type CompanyDTO, CompanyMapper } from './companies.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompaniesEntity } from './companies.entity';
 import { Repository } from 'typeorm';
@@ -9,7 +9,7 @@ import { AdminsService } from '../admins/admins.service';
 export class CompaniesService {
     constructor(
         @InjectRepository(CompaniesEntity) private readonly companiesRepo: Repository<CompaniesEntity>,
-        private readonly adminsService: AdminsService
+        @Inject(forwardRef(() => AdminsService)) private readonly adminsService: AdminsService
     ) { }
 
     async get_by_id(id_company: string): Promise<CompaniesEntity> {

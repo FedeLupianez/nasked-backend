@@ -1,6 +1,6 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { AuthService, type TokensInterface, type UserLoginDTO } from './auth.service';
-import { type UserCreateDTO } from 'src/user/user.dto';
+import { UserCreateDTO } from 'src/user/user.dto';
 import { type RefreshTokenDTO } from './auth.dto';
 
 @Controller('auth')

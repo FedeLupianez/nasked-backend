@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { type AdminsCreateDTO } from 'src/entities/admins/admins.dto';
+import { AdminsCreateDTO } from 'src/entities/admins/admins.dto';
 import { AdminsService } from 'src/entities/admins/admins.service';
-import { type UsersCreateDTO } from 'src/entities/users/users.dto';
+import { UsersCreateDTO } from 'src/entities/users/users.dto';
 import { UsersService } from 'src/entities/users/users.service';
 
 @Controller('user')

@@ -4,7 +4,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { hash, verify } from 'argon2';
 import { randomUUID } from "crypto";
 import { RefreshTokens } from "src/entities/refresh-tokens.entity";
-import type { User, UserCreateDTO } from "src/user/user.dto";
+import { type User, UserCreateDTO } from "src/user/user.dto";
 import { UserService } from "src/user/user.service";
 import { IsNull, Repository } from "typeorm";
 import { jwt_payload, RefreshTokenDTO } from "./auth.dto";

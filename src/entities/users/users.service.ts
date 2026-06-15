@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException, NotFound
 import { InjectRepository } from "@nestjs/typeorm";
 import { UsersEntity } from "./users.entity";
 import { Repository } from "typeorm";
-import { UsersMapper, type UsersCreateDTO, type UsersDTO } from "./users.dto";
+import { UsersMapper, UsersCreateDTO, type UsersDTO } from "./users.dto";
 import { hash } from "argon2";
 
 @Injectable()

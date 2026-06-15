@@ -1,14 +1,23 @@
 
 import type { User } from 'src/user/user.dto'
 import { AdminsEntity } from './admins.entity';
+import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export interface AdminDTO extends User {
     id_company: string;
 }
 
-export interface AdminsCreateDTO {
+export class AdminsCreateDTO {
+
+    @IsEmail()
     email: string;
+
+    @IsNotEmpty()
+    @IsString()
     password: string;
+
+    @IsNotEmpty()
+    @IsString()
     company: string;
 }
 

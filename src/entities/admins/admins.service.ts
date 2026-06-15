@@ -1,8 +1,8 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, InternalServerErrorException, NotFoundException, forwardRef } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { AdminsEntity } from "./admins.entity";
 import { Repository } from "typeorm";
-import { AdminMapper, type AdminDTO, type AdminsCreateDTO } from "./admins.dto";
+import { AdminMapper, type AdminDTO, AdminsCreateDTO } from "./admins.dto";
 import { CompaniesService } from "../companies/companies.service";
 import { hash } from "argon2";
 
@@ -10,7 +10,7 @@ import { hash } from "argon2";
 export class AdminsService {
     constructor(
         @InjectRepository(AdminsEntity) private readonly adminsRepo: Repository<AdminsEntity>,
-        private readonly companyService: CompaniesService
+        @Inject(forwardRef(() => CompaniesService)) private readonly companyService: CompaniesService
     ) { }
 
     async get_by_id(adminId: string): Promise<AdminDTO> {
