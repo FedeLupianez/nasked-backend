@@ -7,6 +7,8 @@ import { CompaniesModule } from './entities/companies/companies.module';
 import { FoldersModule } from './entities/folders/folders.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './entities/users/users.module';
+import { AdminsModule } from './entities/admins/admins.module';
 
 @Module({
     imports: [
@@ -14,7 +16,9 @@ import { AuthModule } from './auth/auth.module';
         CompaniesModule,
         FoldersModule,
         UserModule,
-        AuthModule
+        AuthModule,
+        UsersModule,
+        AdminsModule
     ],
     controllers: [AppController],
     providers: [AppService],

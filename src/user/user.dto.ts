@@ -11,5 +11,6 @@ export interface UserCreateDTO {
     name?: string;
     last_name?: string;
     emp_id?: string;
-    id_company?: string;
+    company?: string;
 }
+

@@ -55,7 +55,6 @@ export class AuthService {
     async register(user: UserCreateDTO): Promise<TokensInterface> {
         const new_user = await this.userService.create(user);
         return this.login({ email: new_user.email, password: user.password });
-
     }
 
     async login(user_login: UserLoginDTO): Promise<TokensInterface> {

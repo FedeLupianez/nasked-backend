@@ -18,12 +18,23 @@ export class CompaniesService {
         return company;
     }
 
+    async get_by_name(company_name: string): Promise<CompanyDTO> {
+        if (!company_name)
+            throw new BadRequestException('company name is required');
+        const name = company_name.toLowerCase();
+        const company = await this.companiesRepo.findOneBy({ name: name });
+        if (!company) {
+            throw new NotFoundException(`Company with name ${company_name} not exists`);
+        }
+        return CompanyMapper.toDTO(company);
+    }
+
     async create(company: CompanyCreateDTO): Promise<CompanyDTO> {
         if (!company.name || !company.logo) {
             throw new BadRequestException('Invalid data');
         }
         const newCompany = this.companiesRepo.create({
-            name: company.name,
+            name: company.name.toLowerCase(),
             logo: company.logo
         });
         this.companiesRepo.save(newCompany);

@@ -1,82 +1,54 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { AdminsEntity } from 'src/entities/admins/admins.entity';
-import { UsersEntity } from 'src/entities/users/users.entity';
-import { Repository } from 'typeorm';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import type { User, UserCreateDTO } from './user.dto';
-import { AdminMapper } from 'src/entities/admins/admins.dto';
-import { UsersMapper } from 'src/entities/users/users.dto';
-import { hash } from 'argon2';
+import { UsersService } from 'src/entities/users/users.service';
+import { AdminsService } from 'src/entities/admins/admins.service';
 
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(UsersEntity) private readonly usersRepo: Repository<UsersEntity>,
-        @InjectRepository(AdminsEntity) private readonly adminsRepo: Repository<AdminsEntity>,
+        private readonly usersService: UsersService,
+        private readonly adminsService: AdminsService,
     ) { }
 
     async get_by_email(email: string): Promise<User> {
         if (!email)
             throw new BadRequestException('Email is empty');
-
-        const admin = await this.adminsRepo.findOneBy({ email: email });
+        const admin = await this.adminsService.get_by_email(email);
         if (admin) {
-            return AdminMapper.toDTO(admin);
+            return admin;
         }
-        const user = await this.usersRepo.findOneBy({ email: email });
-        if (!user)
+        const user = await this.usersService.get_by_email(email);
+        if (user)
             throw new NotFoundException(`User with email ${email} not found`);
-        return UsersMapper.toDTO(user);
+        return user;
     }
 
     async get_by_id(userId: string): Promise<User> {
         if (!userId)
             throw new BadRequestException('Id is empty');
-        const admin = await this.adminsRepo.findOneBy({ id_admin: userId });
+        const admin = await this.adminsService.get_by_id(userId);
         if (admin)
-            return AdminMapper.toDTO(admin);
-        const user = await this.usersRepo.findOneBy({ id_user: userId });
+            return admin;
+        const user = await this.usersService.get_by_id(userId);
         if (!user)
             throw new NotFoundException(`User with id ${userId} not found`);
-        return UsersMapper.toDTO(user);
+        return user;
     }
 
-    async get_admin(userId: string): Promise<User> {
-        if (!userId)
-            throw new BadRequestException('Id is empty');
-        const admin = await this.adminsRepo.findOneBy({ id_admin: userId });
-        if (!admin)
-            throw new UnauthorizedException('user is not admin')
-        return AdminMapper.toDTO(admin);
-    }
-
-    async create(user: UserCreateDTO): Promise<User> {
-        const hashedPassword = await hash(user.password);
-
+    async create(user: UserCreateDTO) {
         if (user.is_admin) {
-            if (!user.id_company)
-                throw new BadRequestException('id_company is required for admin users');
-
-            const admin = this.adminsRepo.create({
+            return this.adminsService.create({
                 email: user.email,
-                password: hashedPassword,
-                id_company: user.id_company,
-            });
-            const saved = await this.adminsRepo.save(admin);
-            return AdminMapper.toDTO(saved);
+                password: user.password,
+                company: user.company!
+            })
         }
-
-        if (!user.name || !user.last_name)
-            throw new BadRequestException('name and last_name are required for regular users');
-
-        const newUser = this.usersRepo.create({
+        return this.usersService.create({
             email: user.email,
-            password: hashedPassword,
-            name: user.name,
-            last_name: user.last_name,
-            emp_id: user.emp_id,
-        });
-        const saved = await this.usersRepo.save(newUser);
-        return UsersMapper.toDTO(saved);
+            password: user.password,
+            emp_id: user.emp_id!,
+            name: user.name!,
+            lastname: user.last_name!
+        })
     }
 }

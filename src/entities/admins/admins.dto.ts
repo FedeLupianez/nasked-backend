@@ -6,6 +6,12 @@ export interface AdminDTO extends User {
     id_company: string;
 }
 
+export interface AdminsCreateDTO {
+    email: string;
+    password: string;
+    company: string;
+}
+
 export class AdminMapper {
     static toDTO(admin: AdminsEntity): AdminDTO {
         return {
