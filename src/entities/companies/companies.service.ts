@@ -1,12 +1,16 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { type CompanyCreateDTO, type CompanyDTO, CompanyMapper } from './companies.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CompaniesEntity } from './companies.entity';
 import { Repository } from 'typeorm';
+import { AdminsService } from '../admins/admins.service';
 
 @Injectable()
 export class CompaniesService {
-    constructor(@InjectRepository(CompaniesEntity) private readonly companiesRepo: Repository<CompaniesEntity>) { }
+    constructor(
+        @InjectRepository(CompaniesEntity) private readonly companiesRepo: Repository<CompaniesEntity>,
+        private readonly adminsService: AdminsService
+    ) { }
 
     async get_by_id(id_company: string): Promise<CompaniesEntity> {
         if (!id_company)
@@ -29,14 +33,21 @@ export class CompaniesService {
         return CompanyMapper.toDTO(company);
     }
 
-    async create(company: CompanyCreateDTO): Promise<CompanyDTO> {
-        if (!company.name || !company.logo) {
+    async create(company_data: CompanyCreateDTO): Promise<CompanyDTO> {
+        if (!company_data.company || !company_data.logo) {
             throw new BadRequestException('Invalid data');
         }
         const newCompany = this.companiesRepo.create({
-            name: company.name.toLowerCase(),
-            logo: company.logo
+            name: company_data.company.toLowerCase(),
+            logo: company_data.logo
         });
+        const newAdmin = this.adminsService.create({
+            email: company_data.email,
+            password: company_data.password,
+            company: company_data.company.toLowerCase()
+        })
+        if (!newAdmin)
+            throw new InternalServerErrorException('Admin was not created');
         this.companiesRepo.save(newCompany);
         return CompanyMapper.toDTO(newCompany);
     }

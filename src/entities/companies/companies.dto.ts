@@ -1,7 +1,7 @@
+import { type AdminsCreateDTO } from "../admins/admins.dto";
 import { CompaniesEntity } from "./companies.entity";
 
-export interface CompanyCreateDTO {
-    name: string;
+export interface CompanyCreateDTO extends AdminsCreateDTO {
     logo: string;
 }
 
