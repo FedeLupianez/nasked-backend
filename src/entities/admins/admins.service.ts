@@ -32,8 +32,6 @@ export class AdminsService {
     }
 
     async create(admin: AdminsCreateDTO): Promise<AdminDTO> {
-        if (!admin.email || !admin.password)
-            throw new BadRequestException('Invalid Data');
         const hashedPassword = await hash(admin.password);
         const company_name = admin.company.toLowerCase();
         const company = await this.companyService.get_by_name(company_name);

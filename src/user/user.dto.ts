@@ -6,6 +6,15 @@ export interface User {
     password: string;
 }
 
+export interface UserFilter {
+    id_user: string;
+    email: string;
+    name?: string;
+    lastname?: string;
+    emp_id?: string;
+    id_company?: string;
+}
+
 export class UserCreateDTO {
     @IsEmail()
     email: string;
@@ -17,7 +26,7 @@ export class UserCreateDTO {
     @IsString()
     name?: string;
     @IsString()
-    last_name?: string;
+    lastname?: string;
     emp_id?: string;
     @IsString()
     company?: string;

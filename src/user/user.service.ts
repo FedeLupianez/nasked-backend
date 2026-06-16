@@ -35,7 +35,7 @@ export class UserService {
         return user;
     }
 
-    async create(user: UserCreateDTO) {
+    async create(user: UserCreateDTO): Promise<User> {
         if (user.is_admin) {
             return this.adminsService.create({
                 email: user.email,
@@ -48,7 +48,7 @@ export class UserService {
             password: user.password,
             emp_id: user.emp_id!,
             name: user.name!,
-            lastname: user.last_name!
+            lastname: user.lastname!
         })
     }
 }

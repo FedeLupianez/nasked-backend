@@ -31,10 +31,6 @@ export class UsersService {
     }
 
     async create(user: UsersCreateDTO): Promise<UsersDTO> {
-        if (!user.name || !user.lastname)
-            throw new BadRequestException('name and last name are required');
-        if (!user.email || !user.password)
-            throw new BadRequestException('Invalid args');
         const hashedPassword = await hash(user.password);
         const newUser = this.usersRepo.create({
             name: user.name,

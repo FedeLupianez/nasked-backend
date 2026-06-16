@@ -1,5 +1,5 @@
 
-import type { User } from 'src/user/user.dto'
+import type { User, UserFilter } from 'src/user/user.dto'
 import { AdminsEntity } from './admins.entity';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
@@ -28,6 +28,13 @@ export class AdminMapper {
             id_company: admin.id_company,
             email: admin.email,
             password: admin.password
+        }
+    }
+
+    static filter(admin: AdminDTO): UserFilter {
+        return {
+            id_user: admin.id_user,
+            email: admin.email
         }
     }
 }
