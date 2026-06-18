@@ -35,5 +35,5 @@ export class FoldersEntity {
     belong: FoldersEntity;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-    created_at: string;
+    created_at: Date;
 }

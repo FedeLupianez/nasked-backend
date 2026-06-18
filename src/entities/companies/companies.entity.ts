@@ -20,7 +20,7 @@ export class CompaniesEntity {
     logo: string;
 
     @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', name: 'created_at' })
-    created_at: string;
+    created_at: Date;
 
     @Column({ type: 'uuid', nullable: false, name: 'id_plan' })
     id_plan: string;

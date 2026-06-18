@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectRepository } from "@nestjs/typeorm";
 import { hash, verify } from 'argon2';
@@ -38,15 +38,21 @@ export class AuthService {
     }
 
     async validateRefreshRoken(token: string): Promise<boolean> {
-        const hashed = await hash(token);
-        const stored = await this.refreshTokensRepo.findOneBy({ token_hash: hashed });
-        if (!stored)
+        const storedTokens = await this.refreshTokensRepo.find();
+        let storedToken: RefreshTokens | null = null;
+        for (const stored of storedTokens) {
+            const match = await verify(stored.token_hash, token);
+            if (match) {
+                storedToken = stored;
+                break;
+            }
+        }
+        if (!storedToken)
             throw new UnauthorizedException('Token not found');
-
-        if (stored.revoked_at)
+        if (storedToken.revoked_at)
             throw new UnauthorizedException('Refresh Token revoked');
-        const expires_at: Date = new Date(stored.expires_at);
-        if (expires_at.getTime() >= Date.now()) {
+        const expires_at: Date = new Date(storedToken.expires_at);
+        if (expires_at.getTime() <= Date.now()) {
             throw new UnauthorizedException('Token expired');
         }
         return true;
@@ -73,8 +79,18 @@ export class AuthService {
     }
 
     async logout(refreshToken: string): Promise<void> {
-        const hashed = await hash(refreshToken);
-        await this.refreshTokensRepo.update({ token_hash: hashed }, { revoked_at: Date.now().toString() });
+        const storedTokens = await this.refreshTokensRepo.find();
+        let storedToken: RefreshTokens | null = null;
+        for (const stored of storedTokens) {
+            const match = await verify(stored.token_hash, refreshToken);
+            if (match) {
+                storedToken = stored;
+                break;
+            }
+        }
+        if (!storedToken)
+            throw new BadRequestException('Refresh Token does not exists');
+        storedToken.revoked_at = new Date();
     }
 
     private async generateRefreshToken(): Promise<string> {
@@ -108,5 +124,10 @@ export class AuthService {
             access_token: this.jwtService.sign(payload),
             refresh_token: await this.generateRefreshToken()
         };
+    }
+
+    getEmail(token: string): string {
+        const payload: jwt_payload = this.jwtService.verify(token);
+        return payload.email;
     }
 }

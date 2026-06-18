@@ -18,9 +18,13 @@ export class AuthController {
             maxAge: days * 60 * 60 * 24
         })
 
-        return {
-            access_token: new_tokens.access_token
-        }
+        const minutes = 17;
+        res.cookie('access_token_nasked', new_tokens.access_token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: minutes * 60
+        })
     }
 
     @Post('login')
@@ -34,9 +38,13 @@ export class AuthController {
             maxAge: days * 60 * 60 * 24
         })
 
-        return {
-            access_token: new_tokens.access_token
-        }
+        const minutes = 17;
+        res.cookie('access_token_nasked', new_tokens.access_token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: minutes * 60
+        })
     }
 
 
@@ -46,15 +54,19 @@ export class AuthController {
         await this.authService.validateRefreshRoken(token);
         const new_tokens: TokensInterface = await this.authService.refresh(body);
         const days: number = 7;
-        res.cookie('refresh_token_cecit', new_tokens.refresh_token, {
+        res.cookie('refresh_token_nasked', new_tokens.refresh_token, {
             httpOnly: true,
             secure: false,
             sameSite: 'strict',
             maxAge: days * 60 * 60 * 24
         });
-        return {
-            access_token: new_tokens.access_token
-        }
+        const minutes = 17;
+        res.cookie('access_token_nasked', new_tokens.access_token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: 'strict',
+            maxAge: minutes * 60
+        })
     }
 
     @Post('logout')

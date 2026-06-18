@@ -14,4 +14,12 @@ export class DatabaseService {
         return new_token;
     }
 
+    async get_new_invoice(): Promise<string> {
+        const result = await this.datasource.query('SELECT get_new_invoice_num()');
+        const newNum: string = result?.[0]?.get_new_invoice_num;
+        if (!newNum)
+            throw new InternalServerErrorException('Error generating invoice number');
+        return newNum;
+    }
+
 }

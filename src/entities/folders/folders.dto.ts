@@ -8,7 +8,7 @@ export interface FolderDTO {
     id_admin: string;
     name: string;
     belong_id: string;
-    created_at: string;
+    created_at: Date;
 }
 
 export class FolderCreateDTO {

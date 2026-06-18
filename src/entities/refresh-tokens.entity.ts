@@ -10,10 +10,10 @@ export class RefreshTokens {
     token_hash: string;
 
     @Column({ type: 'timestamp', name: 'expires_at' })
-    expires_at: string;
+    expires_at: Date;
 
     @Column({ type: 'timestamp', name: 'revoked_at', nullable: true })
-    revoked_at: string;
+    revoked_at: Date;
 
     @Column({ type: 'inet4', name: 'ip_address' })
     ip_address: string;
