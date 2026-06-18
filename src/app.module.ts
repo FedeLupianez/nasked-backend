@@ -12,6 +12,7 @@ import { AdminsModule } from './entities/admins/admins.module';
 import { DatabaseService } from './database/database.service';
 import { BillsModule } from './entities/bills/bills.module';
 import { PlansModule } from './entities/plans/plans.module';
+import { PaymentsModule } from './entities/payments/payments.module';
 
 @Module({
     imports: [
@@ -23,7 +24,8 @@ import { PlansModule } from './entities/plans/plans.module';
         UsersModule,
         AdminsModule,
         BillsModule,
-        PlansModule
+        PlansModule,
+        PaymentsModule
     ],
     controllers: [AppController],
     providers: [AppService, DatabaseService],
