@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BeforeInsert, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CompaniesEntity } from "../companies/companies.entity";
+import { hash } from "argon2";
 
 
 @Entity('Admins')
@@ -19,4 +20,9 @@ export class AdminsEntity {
 
     @Column({ type: 'varchar', length: 255, name: 'password', nullable: false })
     password: string;
+
+    @BeforeInsert()
+    async hashPassword() {
+        this.password = await hash(this.password);
+    }
 }

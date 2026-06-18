@@ -4,7 +4,6 @@ import { AdminsEntity } from "./admins.entity";
 import { Repository } from "typeorm";
 import { AdminMapper, type AdminDTO, AdminsCreateDTO } from "./admins.dto";
 import { CompaniesService } from "../companies/companies.service";
-import { hash } from "argon2";
 
 @Injectable()
 export class AdminsService {
@@ -32,12 +31,11 @@ export class AdminsService {
     }
 
     async create(admin: AdminsCreateDTO): Promise<AdminDTO> {
-        const hashedPassword = await hash(admin.password);
         const company_name = admin.company.toLowerCase();
         const company = await this.companyService.get_by_name(company_name);
         const newAdmin = this.adminsRepo.create({
             email: admin.email,
-            password: hashedPassword,
+            password: admin.password,
             id_company: company.id_company
         })
         const stored = await this.adminsRepo.save(newAdmin);

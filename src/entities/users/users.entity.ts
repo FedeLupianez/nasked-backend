@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { hash } from "argon2";
+import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('UsersNasked')
 export class UsersEntity {
@@ -22,4 +23,9 @@ export class UsersEntity {
 
     @Column({ type: 'boolean', default: true })
     active: boolean;
+
+    @BeforeInsert()
+    async hashPassword() {
+        this.password = await hash(this.password);
+    }
 }
