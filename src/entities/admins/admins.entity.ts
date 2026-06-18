@@ -3,7 +3,7 @@ import { CompaniesEntity } from "../companies/companies.entity";
 import { hash } from "argon2";
 
 
-@Entity('Admins')
+@Entity('AdminsNasked')
 export class AdminsEntity {
     @PrimaryGeneratedColumn('uuid')
     id_admin: string;

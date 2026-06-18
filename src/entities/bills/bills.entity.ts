@@ -10,7 +10,7 @@ export enum BillStatus {
     CANCELED = 'CANCELED'
 }
 
-@Entity('Bills')
+@Entity('BillsNasked')
 export class BillsEntity {
     @PrimaryGeneratedColumn('uuid', { name: 'id_bill' })
     id_bill: string;
