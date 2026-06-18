@@ -10,6 +10,8 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './entities/users/users.module';
 import { AdminsModule } from './entities/admins/admins.module';
 import { DatabaseService } from './database/database.service';
+import { BillsModule } from './entities/bills/bills.module';
+import { PlansModule } from './entities/plans/plans.module';
 
 @Module({
     imports: [
@@ -19,7 +21,9 @@ import { DatabaseService } from './database/database.service';
         UserModule,
         AuthModule,
         UsersModule,
-        AdminsModule
+        AdminsModule,
+        BillsModule,
+        PlansModule
     ],
     controllers: [AppController],
     providers: [AppService, DatabaseService],

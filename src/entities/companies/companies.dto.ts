@@ -2,6 +2,7 @@ import { IsEmail, IsNotEmpty, IsString, IsUrl } from "class-validator";
 import { CompaniesEntity } from "./companies.entity";
 
 export class CompanyCreateDTO {
+    @IsNotEmpty()
     @IsEmail()
     email: string;
 

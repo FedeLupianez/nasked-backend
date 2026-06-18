@@ -5,11 +5,11 @@ import { DatabaseService } from 'src/database/database.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { FoldersEntity } from './folders.entity';
 import { Users_FoldersEntity } from '../users_folders.entity';
-import { UserService } from 'src/user/user.service';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([FoldersEntity, Users_FoldersEntity])],
-    providers: [FoldersService, DatabaseService, UserService],
+    imports: [UserModule, TypeOrmModule.forFeature([FoldersEntity, Users_FoldersEntity])],
+    providers: [FoldersService, DatabaseService],
     controllers: [FoldersController]
 })
 export class FoldersModule { }
