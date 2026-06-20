@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
-import { FolderCreateDTO, FolderJoinDTO } from './folders.dto';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { FolderCreateDTO, FolderJoinDTO, FolderRegenDTO } from './folders.dto';
 import { FoldersService } from './folders.service';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminGuard } from 'src/auth/admin.guard';
+import { FolderAdminGuard } from 'src/auth/folder-admin.guard';
 
 @Controller('folders')
 export class FoldersController {
@@ -16,6 +17,12 @@ export class FoldersController {
     @Post('new')
     async create(@Body() body: FolderCreateDTO) {
         return await this.folderService.create(body);
+    }
+
+    @UseGuards(AuthGuard('jwt'), FolderAdminGuard)
+    @Patch('regentoken')
+    async regen_token(@Body() body: FolderRegenDTO) {
+        return await this.folderService.regen_token(body.id_folder);
     }
 
     @UseGuards(AuthGuard('jwt'))

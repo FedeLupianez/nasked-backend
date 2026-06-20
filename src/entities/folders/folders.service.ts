@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FoldersEntity } from './folders.entity';
 import { In, Repository } from 'typeorm';
@@ -69,10 +69,23 @@ export class FoldersService {
         });
         const folders = await this.folderRepo.find({
             where: {
-                id_folder: In(folder_ids)
+                id_folder: In(folder_ids.map(f => f.id_folder))
             }
         })
         const mapped: FolderDTO[] = folders.map((folder) => FolderMapper.toDTO(folder))
         return mapped;
+    }
+
+    async regen_token(id_folder: string): Promise<boolean> {
+        const folder = await this.folderRepo.findOneBy({
+            id_folder: id_folder
+        })
+        if (!folder)
+            throw new NotFoundException(`Folder with id ${id_folder} does not exists`);
+        folder.access_token = await this.dbService.get_new_token();
+        const stored = await this.folderRepo.save(folder);
+        if (!stored)
+            throw new InternalServerErrorException('Error saving access token');
+        return true;
     }
 }

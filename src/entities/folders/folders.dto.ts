@@ -35,6 +35,12 @@ export class FolderJoinDTO {
     token: string;
 }
 
+export class FolderRegenDTO {
+    @IsNotEmpty()
+    @IsString()
+    id_folder: string;
+}
+
 export class FolderMapper {
     static toDTO(folder: FoldersEntity): FolderDTO {
         return {
