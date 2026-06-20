@@ -2,7 +2,6 @@ import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nest
 import { FolderCreateDTO, FolderJoinDTO } from './folders.dto';
 import { FoldersService } from './folders.service';
 import { AuthService } from 'src/auth/auth.service';
-import { UserService } from 'src/user/user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AdminGuard } from 'src/auth/admin.guard';
 
@@ -11,7 +10,6 @@ export class FoldersController {
     constructor(
         private readonly folderService: FoldersService,
         private readonly authService: AuthService,
-        private readonly userService: UserService
     ) { }
 
     @UseGuards(AuthGuard('jwt'), AdminGuard)
@@ -31,8 +29,7 @@ export class FoldersController {
     async join_link(@Query('token') folder_token: string, @Req() req) {
         const access_token = req['access_token_nasked'];
         const userEmail = this.authService.getEmail(access_token);
-        const user = await this.userService.get_by_email(userEmail);
-        return await this.folderService.join({ id_user: user.id_user, token: folder_token })
+        return await this.folderService.join({ email: userEmail, token: folder_token })
     }
 
     @UseGuards(AuthGuard('jwt'))

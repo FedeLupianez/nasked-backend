@@ -6,6 +6,7 @@ import { FolderCreateDTO, FolderDTO, FolderJoinDTO, FolderMapper } from './folde
 import { DatabaseService } from 'src/database/database.service';
 import { Users_FoldersEntity } from '../users_folders.entity';
 import { UserService } from 'src/user/user.service';
+import { User } from 'src/user/user.dto';
 
 @Injectable()
 export class FoldersService {
@@ -44,9 +45,13 @@ export class FoldersService {
         const folder = await this.folderRepo.findOneBy({ access_token: data.token });
         if (!folder)
             throw new BadRequestException(`Access token ${data.token} does not exists`);
-        const user = await this.userService.get_by_id(data.id_user);
+        if (!data.email && !data.id_user)
+            throw new BadRequestException('User data is empty')
+        let user: User | null = null;
+        if (data.email) user = await this.userService.get_by_email(data.email);
+        if (data.id_user) user = await this.userService.get_by_id(data.id_user);
         if (!user)
-            throw new BadRequestException(`User with id ${data.id_user} does not exists`);
+            throw new BadRequestException(`User not found`);
         const relation = this.users_folders.create({
             id_user: user.id_user,
             id_folder: folder.id_folder
