@@ -1,3 +1,10 @@
+## Licencia
+
+Este proyecto es propiedad de Nasked.
+Su código fuente se publica únicamente con fines de referencia y aprendizaje.
+No está permitido copiar, modificar, redistribuir ni utilizar este software
+sin autorización expresa de Nasked.
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
