@@ -6,6 +6,13 @@ export interface User {
     password: string;
 }
 
+export class UserGetDTO {
+    @IsEmail()
+    email?: string;
+
+    id_user?: string;
+}
+
 export interface UserFilter {
     id_user: string;
     email: string;

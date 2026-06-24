@@ -28,7 +28,7 @@ export class AuthService {
     ) { }
 
     async validateUser(email: string, passwd: string): Promise<User> {
-        const user = await this.userService.get_by_email(email);
+        const user = await this.userService.get_user({ email: email });
         if (!user)
             throw new UnauthorizedException('User not found');
         const passwordValid = await verify(user.password, passwd);
@@ -60,7 +60,17 @@ export class AuthService {
 
     async register(user: UserCreateDTO): Promise<TokensInterface> {
         const new_user = await this.userService.create(user);
-        return this.login({ email: new_user.email, password: user.password });
+        if (!new_user)
+            throw new UnauthorizedException('Invalid Credentials');
+        const payload = {
+            sub: new_user.id_user,
+            email: new_user.email,
+            jti: randomUUID()
+        }
+        return {
+            access_token: this.jwtService.sign(payload),
+            refresh_token: await this.generateRefreshToken()
+        }
     }
 
     async login(user_login: UserLoginDTO): Promise<TokensInterface> {
@@ -117,7 +127,7 @@ export class AuthService {
 
         const payload: jwt_payload = {
             sub: refreshDto.id_user,
-            email: (await this.userService.get_by_id(refreshDto.id_user)).email,
+            email: (await this.userService.get_user({ id_user: refreshDto.id_user })).email,
             jti: randomUUID()
         };
         return {

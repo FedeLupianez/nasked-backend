@@ -1,38 +1,25 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { type User, UserCreateDTO } from './user.dto';
+import { type User, UserCreateDTO, UserGetDTO } from './user.dto';
 import { UsersService } from 'src/entities/users/users.service';
 import { AdminsService } from 'src/entities/admins/admins.service';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class UserService {
     constructor(
         private readonly usersService: UsersService,
         private readonly adminsService: AdminsService,
+        private readonly dbService: DatabaseService
     ) { }
 
-    async get_by_email(email: string): Promise<User> {
-        if (!email)
-            throw new BadRequestException('Email is empty');
-        const admin = await this.adminsService.get_by_email(email);
-        if (admin) {
-            return admin;
-        }
-        const user = await this.usersService.get_by_email(email);
-        if (user)
-            throw new NotFoundException(`User with email ${email} not found`);
-        return user;
-    }
-
-    async get_by_id(userId: string): Promise<User> {
-        if (!userId)
-            throw new BadRequestException('Id is empty');
-        const admin = await this.adminsService.get_by_id(userId);
-        if (admin)
-            return admin;
-        const user = await this.usersService.get_by_id(userId);
-        if (!user)
-            throw new NotFoundException(`User with id ${userId} not found`);
-        return user;
+    async get_user(data: UserGetDTO): Promise<User> {
+        if (!data.email && !data.id_user)
+            throw new BadRequestException('Data is empty');
+        if (!data.email && data.id_user)
+            return this.dbService.get_user_by_id(data.id_user);
+        if (!data.id_user && data.email)
+            return this.dbService.get_user_by_id(data.email);
+        throw new BadRequestException('Invalid Data');
     }
 
     async create(user: UserCreateDTO): Promise<User> {

@@ -47,9 +47,7 @@ export class FoldersService {
             throw new BadRequestException(`Access token ${data.token} does not exists`);
         if (!data.email && !data.id_user)
             throw new BadRequestException('User data is empty')
-        let user: User | null = null;
-        if (data.email) user = await this.userService.get_by_email(data.email);
-        if (data.id_user) user = await this.userService.get_by_id(data.id_user);
+        const user: User = await this.userService.get_user({ email: data.email, id_user: data.id_user });
         if (!user)
             throw new BadRequestException(`User not found`);
         const relation = this.users_folders.create({
@@ -63,7 +61,7 @@ export class FoldersService {
     }
 
     async get_of_user(id_user: string): Promise<FolderDTO[]> {
-        const user = await this.userService.get_by_id(id_user);
+        const user = await this.userService.get_user({ id_user: id_user });
         const folder_ids = await this.users_folders.findBy({
             id_user: user.id_user
         });
